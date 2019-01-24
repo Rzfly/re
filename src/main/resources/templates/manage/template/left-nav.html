@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<div class="layui-layout layui-layout-admin" th:fragment="left-nav">
+  <div class="layui-header">
+    <div class="layui-logo">智能推荐</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="/home">首页</a></li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://qr.liantu.com/api.php?&w=200&text=www.rzflyblog.link" class="layui-nav-img">
+          欢迎使用
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="javascript:;" onclick="back()">返回</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">用户操作</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/manage/userlist">用户列表</a></dd>
+            <dd><a href="/manage/adduser">添加用户</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">课程操作</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/manage/courselist">课程列表</a></dd>
+            <dd><a href="/manage/addcourse">添加课程</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">系统信息</a></li>
+      </ul>
+    </div>
+  </div>

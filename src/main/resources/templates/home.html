@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+	<link rel="stylesheet" href="/layui/css/layui.css"/>
+	<script src="/js/vue.min.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/layui/layui.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>课程列表</title>
+</head>
+<body>
+<div>
+	<div th:replace="template/left-nav :: left-nav"></div>
+	<div class="layui-body">
+		<div>
+			<table id="allcourses" class="layui-table" v-cloak style="table-layout:fixed;">
+				<colgroup>
+					<col width="5%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+					<col width="10%">
+				</colgroup>
+				<thead>
+				<tr>
+					<th>序号</th>
+					<th>课程号</th>
+					<th>课程名称</th>
+					<th>上课时间</th>
+					<th>上课地点</th>
+					<th>学分</th>
+					<th>容量</th>
+					<th>人数</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="(course,index) in courses">
+					<td>{{index+1}}</td>
+					<td>{{course.courseNum}}</td>
+					<td>{{course.courseName}}</td>
+					<td>{{course.courseTime}}</td>
+					<td>{{course.addinfo}}</td>
+					<td>{{course.credits}}</td>
+					<td>{{course.size}}</td>
+					<td>{{course.amount}}</td>
+					<td>
+						<div class="layui-btn-group">
+							<button class="layui-btn  layui-btn-normal" v-on:click="unlike(course)"><i
+									class="layui-icon"></i>不感兴趣
+							</button>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+    //JavaScript代码区域
+    layui.use(['element', 'layer', 'form'], function () {
+        var i = 0;
+        var courserates = new Array();
+        var element = layui.element;
+        var layer = layui.layer;
+        var app = new Vue({
+            el: '#allcourses',
+            data: {
+                courses: [],
+                courserates: [],
+                course: {},
+                average:"",
+                rank:0,
+            },
+            created: function () {
+                this.load();
+            },
+            methods: {
+                load: function () {
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: "/manage/getDividedCourses2",
+                        data: {page:1,pagesize:10},
+                        dataType: 'json',
+                        success: function (courses) {
+                            app.courses = courses;
+                            courserates=[];
+                            for(i=0;i<10;i++)
+                            {
+                                app.average+=app.courses[i].rate/10;
+                                courserates.push(app.courses[i].rate);
+                            }
+                            app.courserates=courserates;
+                        }
+                    });
+                },
+                unlike: function (course) {
+                    layer.confirm('您对这门课不感兴趣吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: "/manage/unlikeCourse",
+                            data: {"courserates": app.courserates,"rate":course.rate,"rank":app.rank},
+                            success: function (res) {
+                                app.courses = res.result;
+                                app.rank = res.rank;
+                                courserates=[];
+                                for(i=0;i<10;i++)
+                                {
+                                    app.average+=app.courses[i].rate/10;
+                                    courserates.push(app.courses[i].rate);
+                                }
+                                app.courserates=courserates;
+                                console.log("ok1");
+                                layer.closeAll();
+                                console.log("ok2");
+                            }
+                        });
+                    });
+                }
+            },
+        });
+        function load() {
+            app.load();
+        }
+
+        function back() {
+            window.history.go(-1)
+        }
+    })
+
+</script>
+</body>
+</html>

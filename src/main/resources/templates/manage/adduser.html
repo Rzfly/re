@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>用户列表</title>
+</head>
+<body>
+<div>
+    <div th:replace="manage/template/left-nav :: left-nav"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="main-content">
+            <table class="layui-table" style="table-layout:fixed">
+                <tr>
+                    <th colspan="1" style="text-align:center">姓名</th>
+                    <td colspan="2">
+                        <input type="text" class="layui-input" placeholder="姓名" v-model="user.name"/>
+                    </td>
+                    <th colspan="1" style="text-align:center">密码</th>
+                    <td colspan="2">
+                        <input type="text" class="layui-input" placeholder="密码" v-model="user.password"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="1" style="text-align:center">学工号</th>
+                    <td colspan="2">
+                        <input type="text" class="layui-input" placeholder="学工号" v-model="user.uid"/>
+                    </td>
+                    <th colspan="1" style="text-align:center">用户类型</th>
+                    <td colspan="2">
+                        <input type="number" class="layui-input" placeholder="用户类型" v-model="user.type"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <button style="margin-left:5%" class="layui-btn" v-on:click="save">提交</button>
+                    </td>
+                </tr>
+            </table>
+            <div/>
+        </div>
+    </div>
+    <script>
+        //JavaScript代码区域
+        $(document).ready(function () {
+            layui.use(['element', 'layer', 'form'], function () {
+                var element = layui.element;
+                var layer = layui.layer;
+                var form = layui.form;
+                var app = new Vue({
+                    el: '.main-content',
+                    data: {
+                        user: {
+                            name: "",
+                            uid: "",
+                            type: "",
+                            password: "",
+                        }
+                    },
+                    methods: {
+                        save: function () {
+                            if (app.user.name == "")
+                                layer.alert("姓名不能为空", {icon: 5});
+                            else if (app.user.password == "")
+                                layer.alert("密码不能为空", {icon: 5});
+                            else if (app.user.uid == "")
+                                layer.alert("学号不能为空", {icon: 5});
+                            else if (app.user.type == "")
+                                layer.alert("用户类型不能为空", {icon: 5});
+                            else {
+                                jQuery.ajax({
+                                    type: 'POST',
+                                    url: "/manage/createUser",
+                                    data: app.user,
+                                    dataType: 'json',
+                                    success: function (json) {
+                                        layer.closeAll('loading')
+                                        if (json.status == 0) {
+                                            layer.msg(json.result, {icon: 6});
+                                        } else {
+                                            layer.alert(json.result, {icon: 5});
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                    }
+                });
+            });
+
+            function back() {
+                window.history.go(-1)
+            }
+        });
+    </script>
+</body>
+</html>
