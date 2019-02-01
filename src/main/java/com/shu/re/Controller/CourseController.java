@@ -1,27 +1,23 @@
 package com.shu.re.Controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shu.re.Repository.CourseRepository;
 import com.shu.re.Repository.Custom.CourseRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.shu.re.Utils.utility;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 import com.shu.re.Model.Course;
 import com.shu.re.Utils.NetResult;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class CourseController {
 
 	@Autowired
-	CourseRepository courseRepository;
+    CourseRepository courseRepository;
 	CourseRepositoryImpl courseRepositoryImpl;
 
 //	@RequestMapping(value = "/manage/initCourses", method = RequestMethod.GET)
@@ -46,7 +42,37 @@ public class CourseController {
 //        }
 //        return courses;
 //	}
-	
+
+    @RequestMapping(value = "/manage/getonecourse")
+    @JsonIgnoreProperties(value={"hibernateLazyInitializer"})
+//    @JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
+    public @ResponseBody NetResult getoneCourse(String uuid) {
+
+        NetResult r = new NetResult();
+        System.out.println("getcourseid:"+uuid);
+        r.status=0;
+//        r.result = courseRepository.getOne("0956d398-4c28-4045-b75a-5276e9aa42fb");
+        r.result =  courseRepository.findById("0956d398-4c28-4045-b75a-5276e9aa42fb").get();
+        System.out.println(((Course) r.result).getUuid());
+        if(courseRepository.getOne("0956d398-4c28-4045-b75a-5276e9aa42fb").equals(courseRepository.findById("0956d398-4c28-4045-b75a-5276e9aa42fb").get()))
+        {
+            System.out.println("equals!");
+        }else {
+
+            System.out.println("notequals!");
+        }
+//        ((Optional) r.result).orElseGet();
+//        Course course = courseRepository.getOne(uuid);
+//        r.result = course;
+//        Course course2 = (Course) courseRepository.getOne("0956d398-4c28-4045-b75a-5276e9aa42fb");
+//        course2.plString();
+//        //        System.out.println(course2.toString());
+//        Course course3 = (Course) courseRepository.findByUuid("0956d398-4c28-4045-b75a-5276e9aa42fb");
+//        course3.plString();
+//        r.result = course2;
+        return r;
+    }
+
 	@RequestMapping(value = "/manage/deleteCourse", method = RequestMethod.POST)
 	public @ResponseBody NetResult deleteCourse(String uuid) {
 
@@ -77,7 +103,8 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/manage/getDividedCourses", method = RequestMethod.POST)
-    public @ResponseBody JSONObject getDividedCourses(int page, int pagesize) {
+    public @ResponseBody
+    JSONObject getDividedCourses(int page, int pagesize) {
         JSONObject res=new JSONObject();
 	    int maxtCount=courseRepository.findByNum("16124400");
         if(maxtCount==0) {
@@ -110,11 +137,11 @@ public class CourseController {
 			int size,
 			String location,
 			String xklimit,
-			float rate,
+			int rate,
 			String factor) {
         Course course = null;
         NetResult r = new NetResult();
-        if (utility.EmptyString(uuid)) {
+        if (uuid.isEmpty()) {
             course = new Course();
         } else {
             course = courseRepository.getOne(uuid);

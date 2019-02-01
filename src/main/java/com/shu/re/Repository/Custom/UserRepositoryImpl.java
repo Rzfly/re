@@ -1,13 +1,13 @@
 package com.shu.re.Repository.Custom;
 
-import org.hibernate.SQLQuery;
-import org.hibernate.transform.Transformers;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
 import javax.persistence.Query;
-import java.util.List;
 
 public class UserRepositoryImpl implements UserRepositoryCustom{
 

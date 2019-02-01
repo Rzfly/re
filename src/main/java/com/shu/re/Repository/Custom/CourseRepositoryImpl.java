@@ -34,9 +34,9 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
         String hql = ""
                 + "select count(c.id) FROM Course c where "
                 + " concat("
-                + "IFNULL(c.courseName,''),"
-                + "IFNULL(c.courseNum,''),"
-                + "IFNULL(c.courseTime,''),"
+                + "IFNULL(c.course_name,''),"
+                + "IFNULL(c.course_num,''),"
+                + "IFNULL(c.course_time,''),"
                 + ") LIKE '%" + (key == null ? "" : key) + "%' "
                 + "";
         try {

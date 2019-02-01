@@ -18,11 +18,11 @@ public class Course {
 	private String teacherNum;//教师号
 	private String courseTime;//上课时间
 	private String addinfo;//上课地点
-	private int size;//容量
-	private int amount;//已选人数
+	private Integer size;//容量
+	private Integer amount;//已选人数
 	private String location;//上课校区
 	private String xklimit;//0=限制人数，1=不限制人数
-	private float rate;
+	private Integer rate;
 	private String factor;
 
 	public Course() {
@@ -90,18 +90,18 @@ public class Course {
 	}
 
 	@Column(name = "size")
-	public int getSize() {
+	public Integer getSize() {
 		return size;
 	}
-	public void setSize(int size) {
+	public void setSize(Integer size) {
 		this.size = size;
 	}
 
 	@Column(name = "amount")
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
@@ -122,10 +122,10 @@ public class Course {
 	}
 
 	@Column(name = "rate")
-	public float getRate() {
+	public Integer getRate() {
 		return rate;
 	}
-	public void setRate(float rate) {
+	public void setRate(Integer rate) {
 		this.rate = rate;
 	}
 
@@ -137,5 +137,33 @@ public class Course {
 		this.factor = factor;
 	}
 
-
+	public void plString(){
+//		String str =
+//			"uuid"			+ ":" +this.getUuid()	+ "//r//n"
+//		+	"courseName"	+ ":" +this.getCourseName()	+ "//r//n"
+//		+	"courseNum"		+ ":" +this.getCourseNum()	+ "//r//n"
+//		+	"credits"		+ ":" +this.getCredits()	+ "//r//n"
+//		+	"teacherNum"	+ ":" +this.getTeacherNum()	+ "//r//n"
+//		+	"courseTime"	+ ":" +this.getCourseTime()	+ "//r//n"
+//		+	"addinfo"		+ ":" +this.getAddinfo()	+ "//r//n"
+//		+	"size"			+ ":" +this.getSize().toString()	+ "//r//n"
+//		+	"amount"		+ ":" +this.getAmount().toString()	+ "//r//n"
+//		+	"location"		+ ":" +this.getLocation()	+ "//r//n"
+//		+	"xklimit"		+ ":" +this.getXklimit()	+ "//r//n"
+//		+ 	"rate"			+ ":" +this.getRate()	+ "/r/n"
+//		+	"factor"		+ ":" +this.getFactor();
+        System.out.println("uuid"			+ ":" +this.getUuid());
+        System.out.println("courseName"	+ ":" +this.getCourseName());
+        System.out.println("courseNum"		+ ":" +this.getCourseNum());
+        System.out.println("credits"		+ ":" +this.getCredits());
+        System.out.println("teacherNum"	+ ":" +this.getTeacherNum());
+        System.out.println("courseTime"	+ ":" +this.getCourseTime()	);
+        System.out.println("addinfo"		+ ":" +this.getAddinfo());
+        System.out.println("size"			+ ":" +this.getSize().toString());
+        System.out.println("amount"		+ ":" +this.getAmount().toString());
+        System.out.println("location"		+ ":" +this.getLocation());
+        System.out.println("xklimit"		+ ":" +this.getXklimit());
+        System.out.println("rate"			+ ":" +this.getRate());
+        System.out.println("factor"		+ ":" +this.getFactor());
+	}
 }

@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <link rel="stylesheet" href="/layui/css/layui.css"/>
-    <script src="/js/vue.min.js"></script>
+    <script src="/js/vue1.0.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="/layui/layui.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
@@ -14,11 +14,13 @@
     <title>课程列表</title>
 </head>
 <body>
-<div>
-    <div th:replace="manage/template/left-nav :: left-nav"></div>
-</div>
-<div class="layui-body">
-    <div>
+    <div class="layui-layout layui-layout-admin">
+    <div th:include="manage/template/left-nav :: left-nav"></div>
+    <div class="layui-body">
+        <fieldset class="layui-elem-field layui-field-title"
+                  style="margin-top: 10px;width:90%">
+            <legend>用户列表</legend>
+        </fieldset>
         <table id="allusers" class="layui-table" v-cloak style="table-layout:fixed;">
             <colgroup>
                 <col width="15%">
@@ -37,8 +39,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(user,index) in nowusers">
-                <td>{{index+1+pagesize*(page-1)}}</td>
+            <tr v-for="user in nowusers">
+                <td>{{$index+1+pagesize*(page-1)}}</td>
                 <td>{{user.name}}</td>
                 <td>{{user.uid}}</td>
                 <td>{{user.type}}</td>
@@ -48,14 +50,19 @@
                                 class="layui-icon"></i>删除
                         </button>
                     </div>
+                    <div class="layui-btn-group">
+                        <button class="layui-btn  layui-btn-normal" v-on:click="edit(user)"><i
+                                class="layui-icon"></i>编辑
+                        </button>
+                    </div>
                 </td>
             </tr>
             </tbody>
-            <tfoot>
+        </table>
+        <table>
             <tr>
                 <div id="page"></div>
             </tr>
-            </tfoot>
         </table>
     </div>
     <script>
@@ -118,6 +125,9 @@
                                 });
                             }
                         });
+                    },
+                    edit:function(user){
+                        window.location.href = "/manage/edituser?id="+user.uuid;
                     },
                     del: function (user) {
                         layer.confirm('确定删除？', {

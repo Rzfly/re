@@ -18,6 +18,7 @@ public class User {
 	private String uid;//学号
 	private String name;//姓名
 	private String password;//密码
+	private String lianghua; // 用户类型：0=管理员，1=学生
 	private int type; // 用户类型：0=管理员，1=学生
 
 	public User() {
@@ -65,6 +66,14 @@ public class User {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	@Column(name = "lianghua")
+	public String getLianghua() {
+		return lianghua;
+	}
+	public void setlianghua(String lianghua) {
+		this.lianghua = lianghua;
 	}
 
 	public String doMD5(String str)  {

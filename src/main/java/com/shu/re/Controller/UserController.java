@@ -28,8 +28,10 @@ public class UserController {
             String name,
             String password,
             String uid,
-            int type) {
-
+            int type,
+            String lianghua) {
+        System.out.println("saveuser!"+uuid);
+        System.out.println("saveuser!"+lianghua);
         User user = null;
         NetResult r = new NetResult();
         if (utility.EmptyString(uuid)) {
@@ -47,6 +49,7 @@ public class UserController {
         user.setPassword(password);
         user.setType(type);
         user.setUid(uid);
+        user.setlianghua(lianghua);
         userRepository.saveAndFlush(user);
         r.status = 0;
         r.result = "保存成功";
@@ -59,17 +62,36 @@ public class UserController {
             String name,
             String password,
             String uid,
-            int type) {
+            int type,
+            String lianghua) {
         User user = new User();
         NetResult r = new NetResult();
         user.setName(name);
         user.setPassword(password);
         user.setType(type);
         user.setUid(uid);
+//        user.setlianghua(lianghua);
         userRepository.save(user);
         r.status = 0;
         r.result = "保存成功";
         System.out.println(user.getUuid());
+        return r;
+    }
+
+    @RequestMapping(value = "/manage/getoneuser", method = RequestMethod.POST)
+    public @ResponseBody
+    NetResult getoneUser(
+            String uuid) {
+        NetResult r = new NetResult();
+        r.status = 0;
+        System.out.println(uuid);
+        User user = new User();
+        user = userRepository.findByUuid(uuid);
+        r.result = user;
+        System.out.println(user.toString());
+        System.out.println(user.getName());
+        System.out.println("getone!");
+        System.out.println(r.result.toString());
         return r;
     }
 

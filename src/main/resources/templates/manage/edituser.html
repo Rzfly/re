@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link rel="stylesheet" href="/layui/css/layui.css"/>
+    <!--<script src="/js/vue.min.js"></script>-->
+    <script src="/js/vue1.0.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/layui/layui.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>用户列表</title>
+</head>
+<body>
+    <div class="layui-layout layui-layout-admin">
+    <div th:include="manage/template/left-nav :: left-nav"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <fieldset class="layui-elem-field layui-field-title"
+                  style="margin-top: 10px;width:90%">
+            <legend>编辑用户</legend>
+        </fieldset>
+        <div class="main-content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" v-model="user.name" required  lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" v-model="user.password" required placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">学/工号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="user.uid" required placeholder="请输入学/工号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">心仪课时</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="yi" title="1">
+                        <input type="checkbox" name="er" title="2">
+                        <input type="checkbox" name="san" title="3">
+                        <input type="checkbox" name="si" title="4">
+                        <input type="checkbox" name="wu" title="5">
+                        <input type="checkbox" name="liu" title="6">
+                        <input type="checkbox" name="qi" title="7">
+                        <input type="checkbox" name="ba" title="8">
+                        <input type="checkbox" name="jiu" title="9">
+                        <input type="checkbox" name="shi" title="10">
+                        <input type="checkbox" name="shiyi" title="11">
+                        <input type="checkbox" name="shier" title="12">
+                        <input type="checkbox" name="shisan" title="13">
+                        <!--<input type="checkbox" name="yi[1]" title="1">-->
+                        <!--<input type="checkbox" name="yi[2]" title="2">-->
+                        <!--<input type="checkbox" name="yi[3]" title="3">-->
+                        <!--<input type="checkbox" name="yi[4]" title="4">-->
+                        <!--<input type="checkbox" name="yi[5]" title="5">-->
+                        <!--<input type="checkbox" name="yi[6]" title="6">-->
+                        <!--<input type="checkbox" name="yi[7]" title="7">-->
+                        <!--<input type="checkbox" name="yi[8]" title="8">-->
+                        <!--<input type="checkbox" name="yi[9]" title="9">-->
+                        <!--<input type="checkbox" name="yi[10]" title="10">-->
+                        <!--<input type="checkbox" name="yi[11]" title="11">-->
+                        <!--<input type="checkbox" name="yi[12]" title="12">-->
+                        <!--<input type="checkbox" name="yi[13]" title="13">-->
+                    </div>
+                </div>
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周一心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.yi" required placeholder="周一心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周二心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.er" required placeholder="周二心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周三心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.san" required placeholder="周三心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周四心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.si" required placeholder="周四心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周五心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.wu" required placeholder="周五心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周六心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.liu" required placeholder="周六心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label" style="text-align:center;vertical-align:middle;">周日心仪课时</label>-->
+                    <!--<div class="layui-input-inline">-->
+                        <!--<input type="text" v-model="lianghua.qi" required placeholder="周日心仪课时" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">用户类型</label>
+                    <div class="layui-input-block">
+                        <select name="didian">
+                            <option disabled>请选择</option>
+                            <option value="yanchang">延长校区</option>
+                            <option value="benbu">校本部</option>
+                            <option value="jiading">嘉定校区</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">用户类型</label>
+                    <div class="layui-input-block">
+                        <select name="userType">
+                            <option disabled>请选择</option>
+                            <option value="0">一般用户</option>
+                            <option value="1">管理员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="text-align:center;vertical-align:middle;">学/工号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="user.uid" required placeholder="请输入学/工号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="button" class="layui-btn" lay-submit lay-filter="formDemo" value="立即提交">
+                    </div>
+                </div>
+            </form>
+                 <input type="hidden" th:value="${user}" id="staff_name2"/>
+        </div>
+    </div>
+    </div>
+</body>
+    <script>
+        //JavaScript代码区域
+        layui.use(['element', 'layer', 'form'], function () {
+            var element = layui.element;
+            var layer = layui.layer;
+            var form = layui.form;
+            var table = ["yi","er","san","si","wu","liu","qi","ba","jiu","shi","shiyi","shier","shisan"]
+            // table[0]="yi","er","san","si","wu","liu","qi","ba","jiu","shi","shiyi","shier","shisan"
+            console.log(table);
+            form.on('submit(formDemo)', function(data) {
+                var this_data = data.field;
+                console.log(this_data);
+                app.user.type = this_data.userType;
+                for (var i = 0; i < 13; i++)
+                {
+                    if (this_data[table[i]] != null)
+                        app.lianghua.shijian[table[i]] = this_data[table[i]];
+                    else
+                        app.lianghua.shijian[table[i]] = "off";
+                }
+                // console.log(this_data["userType"]);
+                // console.log(this_data.get("yi"));
+                // console.log(this_data.get("yi[2]"));
+                // console.log(this_data.length);
+                // app.user.lianghua=JSON.stringify(data.field["yi"]);
+                console.log(app.user);
+                app.lianghua.didian = this_data.didian;
+                app.user.lianghua = app.lianghua;
+                console.log( app.user.lianghua);
+                console.log( app.user.lianghua);
+                app.user.lianghua = JSON.stringify(app.user.lianghua);
+                app.save();
+                return false;
+            });
+        });
+        // console.log(user);
+        // var user =request.getAttribute("user");
+        var app = new Vue({
+            el: '.main-content',
+            data: {
+                user: {
+                    name: "",
+                    uuid:"",
+                    uid: "",
+                    type: "",
+                    password: "",
+                    lianghua:{
+                        shijian:{
+                            yi:"",
+                            er:"",
+                            san:"",
+                            si:"",
+                            wu:"",
+                            liu:"",
+                            qi:"",
+                            ba:"",
+                            jiu:"",
+                            shi:"",
+                            shiyi:"",
+                            shier:"",
+                            shisan:""
+                        },
+                        didian:"",
+                    },
+                },
+                // user: {},
+                lianghua:{
+                    shijian:{
+                        yi:"",
+                        er:"",
+                        san:"",
+                        si:"",
+                        wu:"",
+                        liu:"",
+                        qi:"",
+                        ba:"",
+                        jiu:"",
+                        shi:"",
+                        shiyi:"",
+                        shier:"",
+                        shisan:""
+                    },
+                    didian:"",
+                },
+            },
+            created: function () {
+                this.load();
+                // var user = $("#staff_name2").val();
+                // console.log(user);
+                // console.log(app.user);
+                // // this.user = user;
+                // this.app.name = user.name;
+                // this.app.uuid = user.uuid;
+                // this.app.uid = user.uid;
+                // this.app.password = user.password;
+                // this.app.type = user.type;
+                // console.log(app.user);
+            },
+            methods: {
+                load:function(){
+                    var user = $("#staff_name2").val();
+                    console.log(user);
+                    console.log(user["uuid"]);
+                    var obj = JSON.parse(user);
+                    console.log(obj);
+                    console.log(obj["uuid"]);
+                    $.ajax({
+                        type: 'POST',
+                        url: "/manage/getoneuser",
+                        data: { uuid : obj["uuid"],
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log(result)
+                            app.user = result.result;
+                            // this.app.name = result.result.name;
+                            // this.app.uuid = result.result.uuid;
+                            // this.app.uid = result.result.uid;
+                            // this.app.password = result.result.password;
+                            // this.app.type = result.result.type;
+                            console.log(app.user);
+                        }
+                    });
+                },
+                save: function () {
+                    if (app.user.name == "")
+                        layer.alert("姓名不能为空", {icon: 5});
+                    else if (app.user.password == "")
+                        layer.alert("密码不能为空", {icon: 5});
+                    else if (app.user.uid == "")
+                        layer.alert("学号不能为空", {icon: 5});
+                    else if (app.user.type == "")
+                        layer.alert("用户类型不能为空", {icon: 5});
+                    else {
+                        // app.user.lianghua=JSON.stringify(app.lianghua);
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: "/manage/saveUser",
+                            data: app.user,
+                            dataType: 'json',
+                            success: function (json) {
+                                layer.closeAll('loading')
+                                if (json.status == 0) {
+                                    layer.msg(json.result, {icon: 6});
+                                } else {
+                                    layer.alert(json.result, {icon: 5});
+                                }
+                            }
+                        });
+                    }
+                },
+            }
+        });
+
+
+        function back() {
+            window.history.go(-1)
+        }
+    </script>
+</html>
