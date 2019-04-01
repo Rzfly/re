@@ -5,6 +5,7 @@ import com.shu.re.Repository.Custom.UserRepositoryImpl;
 import com.shu.re.Repository.UserRepository;
 import com.shu.re.Utils.NetResult;
 import com.shu.re.Utils.utility;
+import com.shu.re.service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -120,4 +122,5 @@ public class UserController {
         List<User> acs = userRepository.findAll();
         return acs;
     }
+
 }

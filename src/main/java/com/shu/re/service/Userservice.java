@@ -8,9 +8,11 @@ import com.shu.re.Model.User;
 import com.shu.re.Repository.CourseRepository;
 import com.shu.re.Repository.Custom.UserRepositoryImpl;
 import com.shu.re.Repository.UserRepository;
+import com.shu.re.km.Datasi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,23 +22,25 @@ public class Userservice {
 
     @Autowired
     UserRepository userRepository;
-    CourseRepository courseRepository;
 
-    public Map<String,String> quartcourse(String uuid)
+    public List<Datasi> quartcourse(List<Course> courseList, String uuid)
     {
+        List<Datasi> ld = new ArrayList<Datasi>();
         User dbuser = userRepository.findByUuid(uuid);
-        List<Course> courseList = courseRepository.findAll();
-        Map map = new HashMap<String,String>();
+        //Map map = new HashMap<String,String>();
         for(int i=0;i<courseList.size();i++){
             Integer score = setscore(dbuser,courseList.get(i));
-            map.put(courseList.get(i).getUuid(),score.toString());
+            System.out.println("得分"+score);
+            //map.put(courseList.get(i).getUuid(),score.toString());
+            float[] f = new float[] {score*10, courseList.get(i).getRate()};
+            Datasi d = new Datasi(i+1,courseList.get(i),uuid,f);
+            ld.add(d);
         }
-
-        return map;
+        return ld;
     }
 
     public Integer setscore(User user,Course course){
-
+        course.plString();
         int score = 100;
         String str = course.getCourseTime();
         int length = str.length();
@@ -182,11 +186,19 @@ public class Userservice {
         map.put("11","shiyi");
         map.put("12","shier");
         map.put("13","shisan");
+        System.out.println("changekey:"+ori_key+" to "+map.get(ori_key));
         return map.get(ori_key);
     }
 
     public Integer judge(String str,int score,JSONObject shijian){
         int length = str.length();
+        String strend = str.substring(length-1);
+        if(strend.equals("单") || strend.equals("双") || strend.equals(" "))
+        {
+            str = str.substring(0,length-1);
+        }
+        System.out.println("被评分部分为"+str);
+        length = str.length();
         if(length==0) {
             score = 0;
         }else if(length <=4){
@@ -196,8 +208,8 @@ public class Userservice {
             String end = str.substring(index+1,index+2);
             start = changekey2(start);
             end = changekey2(end);
-            System.out.println(shijian.get(start)+"对比"+start);
-            System.out.println(shijian.get(end)+"对比"+end);
+            System.out.println(start+"状态为"+shijian.get(start));
+            System.out.println(end+"状态为"+shijian.get(end));
             System.out.println(shijian.get(start)+"off");
             System.out.println(shijian.get(end)+"off");
             if(shijian.get(start).equals("off")){
@@ -212,8 +224,11 @@ public class Userservice {
             System.out.println("5~6字节");
             int index = str.indexOf("-");
             if(index==2) {
+                System.out.println("-在第三位");
                 String start = str.substring(index - 1, index);
                 String end = str.substring(index + 1);
+                System.out.println("start:"+start);
+                System.out.println("end:"+end);
                 start = changekey2(start);
                 end = changekey2(end);
                 System.out.println(shijian.get(start)+"对比"+start);
@@ -227,8 +242,13 @@ public class Userservice {
                     score = score - 25;
                 }
             }else if(index == 3){
+                System.out.println("-在第四位");
                 String start = str.substring(index - 2, index);
                 String end = str.substring(index + 1);
+                System.out.println("start:"+start);
+                System.out.println("end:"+end);
+                start = changekey2(start);
+                end = changekey2(end);
                 System.out.println(shijian.get(start)+"对比"+start);
                 System.out.println(shijian.get(end)+"对比"+end);
                 if(shijian.get(start).equals("off")){

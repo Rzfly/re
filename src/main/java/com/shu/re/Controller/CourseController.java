@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.shu.re.Repository.CourseRepository;
 import com.shu.re.Repository.Custom.CourseRepositoryImpl;
+import com.shu.re.km.Cluster;
+import com.shu.re.km.Datasi;
+import com.shu.re.km.KMeansRun;
+import com.shu.re.service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +23,8 @@ public class CourseController {
 	@Autowired
     CourseRepository courseRepository;
 	CourseRepositoryImpl courseRepositoryImpl;
-
+    @Autowired
+    Userservice userservice;
 //	@RequestMapping(value = "/manage/initCourses", method = RequestMethod.GET)
 //	public @ResponseBody List<Course> initCourses() {
 //
@@ -84,7 +89,7 @@ public class CourseController {
 		return r;
 	}
 	
-	@RequestMapping(value = "/manage/getAllcourses", method = RequestMethod.POST)
+	@RequestMapping(value = "/manage/getAllcourses")
 	public @ResponseBody List<Course> getAllcourses() {
         List<Course> courses = courseRepository.findAll();
         System.out.println(courses.get(0).getCourseName());
@@ -232,5 +237,43 @@ public class CourseController {
         res.put("result",acs);
         res.put("rank",newrank);
         return res;
+    }
+
+    @RequestMapping(value = "/manage/couersejudgetest", method = RequestMethod.GET)
+    public List<Datasi> coursejt() {
+        List<Course> courses = courseRepository.findAll();
+        List<Datasi> map = userservice.quartcourse(courses,"386e9b0f-6295-4a34-b22b-854d19910edb");
+        KMeansRun kRun =new KMeansRun(3, map);
+        Set<Cluster> clusterSet = kRun.run();
+        System.out.println("单次迭代运行次数："+kRun.getIterTimes());
+        for (Cluster cluster : clusterSet) {
+            System.out.println(cluster);
+        }
+        System.out.println("km1号聚类完毕");
+        return map;
+    }
+
+
+    @RequestMapping(value = "/manage/couersejudgetest2", method = RequestMethod.GET)
+    public List<Course> coursejt2(String inicourse){
+        List<Course> courses = courseRepository.findAll();
+        List<Datasi> list = userservice.quartcourse(courses,"3e2a4948-a8b6-477a-8c58-b94b147c15ce");
+        KMeansRun kRun = new KMeansRun(10, list);
+        Set<Cluster> clusterSet = kRun.run(inicourse);
+        System.out.println("单次迭代运行次数："+kRun.getIterTimes());
+        List<Course> listc = new ArrayList<>();
+        for (Cluster cluster : clusterSet) {
+            System.out.println(cluster);
+            if(cluster.getId() == kRun.getCourseCluId()){
+                list = cluster.getMembers();
+            }
+        }
+        for (int i = 0 ; i < list.size();i++){
+            listc.add(list.get(i).getCourse());
+        }
+        System.out.println("km2号聚类完毕");
+        System.out.println("初始课程"+kRun.getInicourse());
+        System.out.println("分在大类"+kRun.getCourseCluId());
+        return listc;
     }
 }
