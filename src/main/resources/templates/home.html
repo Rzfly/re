@@ -4,7 +4,7 @@
 	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 	<link rel="stylesheet" href="/layui/css/layui.css"/>
-	<script src="/js/vuemin.js"></script>
+	<script src="/js/vue1.0.js"></script>
 	<script src="/js/jquery.min.js"></script>
 	<script src="/layui/layui.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
@@ -17,6 +17,10 @@
 <div>
 	<div th:replace="template/left-nav :: left-nav"></div>
 	<div class="layui-body">
+		<fieldset class="layui-elem-field layui-field-title"
+				  style="margin-top: 10px;width:90%">
+			<legend>课程列表</legend>
+		</fieldset>
 		<div>
 			<table id="allcourses" class="layui-table" v-cloak style="table-layout:fixed;">
 				<colgroup>
@@ -44,8 +48,8 @@
 				</tr>
 				</thead>
 				<tbody>
-				<tr v-for="(course,index) in courses">
-					<td>{{index+1}}</td>
+				<tr v-for="course in courses">
+					<td>{{$index+1}}</td>
 					<td>{{course.course_num}}</td>
 					<td>{{course.course_name}}</td>
 					<td>{{course.course_time}}</td>
@@ -62,6 +66,11 @@
 					</td>
 				</tr>
 				</tbody>
+			</table>
+			<table>
+				<tr>
+					<div id="page"></div>
+				</tr>
 			</table>
 		</div>
 	</div>
@@ -110,9 +119,9 @@
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         jQuery.ajax({
-                            type: 'POST',
-                            url: "/manage/unlikeCourse",
-                            data: {"courserates": app.courserates,"rate":course.rate,"rank":app.rank},
+                            type: 'GET',
+                            url: "/manage/couersejudgetest2",
+                            data: {"inicourse": course.uuid,},
                             success: function (res) {
                                 app.courses = res.result;
                                 console.log(res.result);
@@ -152,6 +161,7 @@
 								console.log("ok1");
 								layer.closeAll();
 								console.log("ok2");
+                                layer.msg("推荐完成！");
 							}
 						});
 					});

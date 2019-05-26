@@ -22,14 +22,11 @@ public class PageController {
     @Autowired
     Userservice userservice;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home() {return "home"; }
-	
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String goHome() {return "home"; }
+	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
+	public String login() {return "login"; }
 
-	@RequestMapping(value = "/user/home", method = RequestMethod.GET)
-	public String userHome() { return "home"; }
+	@RequestMapping(value = {"/index","/user/home",}, method = RequestMethod.GET)
+	public String home() {return "home"; }
 	
 	@RequestMapping(value = "/manage/", method = RequestMethod.GET)
 	public String manageHome() { return "manage/home"; }
