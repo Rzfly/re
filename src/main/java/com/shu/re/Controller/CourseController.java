@@ -2,6 +2,7 @@ package com.shu.re.Controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.shu.re.Model.CourseVO;
 import com.shu.re.Repository.CourseRepository;
 import com.shu.re.Repository.Custom.CourseRepositoryImpl;
 import com.shu.re.km.Cluster;
@@ -234,6 +235,7 @@ public class CourseController {
                 +"limit "+newrank+","+10+"";
         JSONObject res= new JSONObject();
         List<Course> acs= courseRepository.getDividedCourses(sqlStr);
+        System.out.println(acs.toArray().toString());
         res.put("result",acs);
         res.put("rank",newrank);
         return res;
@@ -255,13 +257,13 @@ public class CourseController {
 
 
     @RequestMapping(value = "/manage/couersejudgetest2", method = RequestMethod.GET)
-    public List<Course> coursejt2(String inicourse){
+    public List<CourseVO> coursejt2(String inicourse){
         List<Course> courses = courseRepository.findAll();
         List<Datasi> list = userservice.quartcourse(courses,"3e2a4948-a8b6-477a-8c58-b94b147c15ce");
         KMeansRun kRun = new KMeansRun(10, list);
         Set<Cluster> clusterSet = kRun.run(inicourse);
         System.out.println("单次迭代运行次数："+kRun.getIterTimes());
-        List<Course> listc = new ArrayList<>();
+        List<CourseVO> listc = new ArrayList<>();
         for (Cluster cluster : clusterSet) {
             System.out.println(cluster);
             if(cluster.getId() == kRun.getCourseCluId()){
@@ -269,7 +271,7 @@ public class CourseController {
             }
         }
         for (int i = 0 ; i < list.size();i++){
-            listc.add(list.get(i).getCourse());
+            listc.add(CourseVO.convert(list.get(i).getCourse()));
         }
         System.out.println("km2号聚类完毕");
         System.out.println("初始课程"+kRun.getInicourse());

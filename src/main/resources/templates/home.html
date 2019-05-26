@@ -46,17 +46,17 @@
 				<tbody>
 				<tr v-for="(course,index) in courses">
 					<td>{{index+1}}</td>
-					<td>{{course.courseNum}}</td>
-					<td>{{course.courseName}}</td>
-					<td>{{course.courseTime}}</td>
+					<td>{{course.course_num}}</td>
+					<td>{{course.course_name}}</td>
+					<td>{{course.course_time}}</td>
 					<td>{{course.addinfo}}</td>
 					<td>{{course.credits}}</td>
 					<td>{{course.size}}</td>
 					<td>{{course.amount}}</td>
 					<td>
 						<div class="layui-btn-group">
-							<button class="layui-btn  layui-btn-normal" v-on:click="unlike(course)"><i
-									class="layui-icon"></i>不感兴趣
+							<button class="layui-btn  layui-btn-normal" v-on:click="like(course)"><i
+									class="layui-icon"></i>感兴趣
 							</button>
 						</div>
 					</td>
@@ -115,6 +115,7 @@
                             data: {"courserates": app.courserates,"rate":course.rate,"rank":app.rank},
                             success: function (res) {
                                 app.courses = res.result;
+                                console.log(res.result);
                                 app.rank = res.rank;
                                 courserates=[];
                                 for(i=0;i<10;i++)
@@ -129,7 +130,32 @@
                             }
                         });
                     });
-                }
+                },
+				like: function (course) {
+					layer.confirm('您对这门课感兴趣吗？', {
+						btn: ['确定', '取消'] //按钮
+					}, function () {
+						jQuery.ajax({
+								type: 'GET',
+							url: "/manage/couersejudgetest2",
+							data: {"inicourse":course.course_num},
+							success: function (res) {
+								console.log(res);
+								app.courses = res;
+								courserates=[];
+								for(i=0;i<10;i++)
+								{
+									app.average+=app.courses[i].rate/10;
+									courserates.push(app.courses[i].rate);
+								}
+								app.courserates=courserates;
+								console.log("ok1");
+								layer.closeAll();
+								console.log("ok2");
+							}
+						});
+					});
+				}
             },
         });
         function load() {
